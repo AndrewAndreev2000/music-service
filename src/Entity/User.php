@@ -22,7 +22,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Email]
-//    #[Groups(['registration'])]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -79,6 +78,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(?string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
