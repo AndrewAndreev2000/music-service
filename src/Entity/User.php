@@ -14,17 +14,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const TABLE_NAME = 'user';
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    #[ORM\Column(name: 'email', type: Types::STRING, length: 255, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Email]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column(name: 'password', type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
     private ?string $password = null;
 
