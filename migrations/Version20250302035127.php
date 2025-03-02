@@ -21,8 +21,10 @@ final class Version20250302035127 extends AbstractMigration
         $table->addColumn('email', Types::STRING, ['notnull' => true, 'length' => 255]);
         $table->addColumn('password', Types::STRING, ['notnull' => true, 'length' => 255]);
         $table->addColumn('roles', Types::JSON, ['notnull' => true]);
+        $table->addColumn('name', Types::STRING, ['notnull' => true, 'length' => 255]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['email'], 'UNIQ_USER_EMAIL');
+        $table->addUniqueIndex(['name'], 'UNIQ_USER_NAME');
     }
 
     public function down(Schema $schema): void
