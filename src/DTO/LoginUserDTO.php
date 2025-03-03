@@ -4,7 +4,7 @@ namespace App\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateUserFromDTO
+class LoginUserDTO
 {
     public function __construct(
         #[Assert\NotBlank]
@@ -12,10 +12,7 @@ class CreateUserFromDTO
         public string $email,
 
         #[Assert\NotBlank]
-        public string $password,
-
-        #[Assert\NotBlank]
-        public string $name
+        public string $password
     ) {
     }
 }

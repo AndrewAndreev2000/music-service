@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: self::TABLE_NAME)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    public const TABLE_NAME = 'user';
+    public const TABLE_NAME = 'app_user';
 
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\Id]
@@ -27,10 +27,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'password', type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
     private ?string $password = null;
-
-    #[ORM\Column(type: Types::STRING, length: 32)]
-    #[Assert\NotBlank]
-    private ?string $type = null;
 
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];

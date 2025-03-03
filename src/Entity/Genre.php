@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: self::TABLE_NAME)]
 class Genre
 {
-    public const TABLE_NAME = 'genre';
+    public const TABLE_NAME = 'app_genre';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
