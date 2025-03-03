@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -30,6 +31,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
+
+    #[ORM\OneToMany(targetEntity: Album::class, mappedBy: 'artist', cascade: ['persist'])]
+    protected ArrayCollection $albums;
+
+    public function __construct()
+    {
+        $this->albums = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
