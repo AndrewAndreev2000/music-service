@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\DTO\LoginUserDTO;
+use App\DTO\User\LoginUserDTO;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -28,17 +28,17 @@ class LoginController extends AbstractController
     }
 
     #[Route('/api/login', name: 'app_login', methods: ['POST'])]
-    public function login(#[MapRequestPayload] LoginUserDto $request): JsonResponse
+    public function loginAction(#[MapRequestPayload] LoginUserDto $loginUserDTO): JsonResponse
     {
-        $errors = $this->validator->validate($request);
+        $errors = $this->validator->validate($loginUserDTO);
 
         if (count($errors) > 0) {
             return new JsonResponse(['errors' => $errors], 400);
         }
 
-        $user = $this->getUserByEmail($request->email);
+        $user = $this->getUserByEmail($loginUserDTO->email);
 
-        if (!$user || !$this->checkPassword($user, $request->password)) {
+        if (!$user || !$this->checkPassword($user, $loginUserDTO->password)) {
             return new JsonResponse(['error' => 'Invalid credentials'], 401);
         }
 

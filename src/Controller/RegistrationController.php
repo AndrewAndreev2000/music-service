@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\DTO\User\CreateUserDTO;
 use App\Entity\Manager\UserManager;
-use App\DTO\CreateUserDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,16 +22,16 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/api/register', name: 'app_register', methods: ['POST'])]
-    public function registerAction(#[MapRequestPayload] CreateUserDTO $createUserFromDTO): JsonResponse
+    public function registerAction(#[MapRequestPayload] CreateUserDTO $createUserDTO): JsonResponse
     {
-        $errors = $this->validator->validate($createUserFromDTO);
+        $errors = $this->validator->validate($createUserDTO);
 
         if (count($errors) > 0) {
             return new JsonResponse(['errors' => $errors], Response::HTTP_BAD_REQUEST);
         }
 
         try {
-            $user = $this->userManager->createUserFromDto($createUserFromDTO);
+            $user = $this->userManager->createUserFromDto($createUserDTO);
 
             $this->userManager->saveUser($user);
 
