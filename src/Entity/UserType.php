@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: self::TABLE_NAME)]
 class UserType
 {
-    public const TABLE_NAME = 'user_type';
+    public const TABLE_NAME = 'app_user_type';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

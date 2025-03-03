@@ -2,7 +2,7 @@
 
 namespace App\Entity\Manager;
 
-use App\DTO\CreateUserFromDTO;
+use App\DTO\CreateUserDTO;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -15,12 +15,12 @@ class UserManager
     ) {
     }
 
-    public function createUserFromDto(CreateUserFromDTO $createUserFromDTO): User
+    public function createUserFromDto(CreateUserDTO $createUserFromDTO): User
     {
         $existingUser = $this->managerRegistry->getRepository(User::class)->findOneBy(['email' => $createUserFromDTO->email]);
 
-        if ($existingUser) {
-            throw new \DomainException('User with this email already exists');
+        if (null !== $existingUser) {
+            throw new \Exception('Пользователь с таким email уже существует');
         }
 
         $user = new User();
@@ -29,6 +29,8 @@ class UserManager
         $hashedPassword = $this->passwordHasher->hashPassword($user, $createUserFromDTO->password);
 
         $user->setPassword($hashedPassword);
+        $user->setName($createUserFromDTO->name);
+        $user->setRoles($createUserFromDTO->roles);
 
         return $user;
     }
