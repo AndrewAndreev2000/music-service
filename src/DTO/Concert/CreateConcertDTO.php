@@ -1,10 +1,10 @@
 <?php
 
-namespace App\DTO\Album;
+namespace App\DTO\Concert;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateAlbumDTO
+class CreateConcertDTO
 {
     public function __construct(
         #[Assert\NotBlank]

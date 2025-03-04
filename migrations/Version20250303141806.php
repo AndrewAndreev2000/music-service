@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
-use App\Entity\Album;
+use App\Entity\Concert;
 use App\Entity\User;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
@@ -17,14 +17,18 @@ final class Version20250303141806 extends AbstractMigration
 {
     public function up(Schema $schema): void
     {
-        $this->createAlbumTable($schema);
-
-        $this->createAlbumForeignKeys($schema);
+        $this->createConcertTable($schema);
+        $this->createConcertForeignKeys($schema);
     }
 
-    private function createAlbumTable(Schema $schema): void
+    public function down(Schema $schema): void
     {
-        $table = $schema->createTable(Album::TABLE_NAME);
+        $schema->dropTable(Concert::TABLE_NAME);
+    }
+
+    private function createConcertTable(Schema $schema): void
+    {
+        $table = $schema->createTable(Concert::TABLE_NAME);
         $table->addColumn('id', Types::INTEGER, ['autoincrement' => true]);
         $table->addColumn('name', Types::STRING, ['notnull' => true, 'length' => 255]);
         $table->addColumn('description', Types::TEXT, ['notnull' => true]);
@@ -32,21 +36,16 @@ final class Version20250303141806 extends AbstractMigration
         $table->setPrimaryKey(['id']);
     }
 
-    private function createAlbumForeignKeys(Schema $schema): void
+    private function createConcertForeignKeys(Schema $schema): void
     {
-        $table = $schema->getTable(Album::TABLE_NAME);
+        $table = $schema->getTable(Concert::TABLE_NAME);
 
         $table->addForeignKeyConstraint(
             $schema->getTable(User::TABLE_NAME),
             ['artist_id'],
             ['id'],
             ['onDelete' => 'CASCADE'],
-            'fk_app_album_artist_id'
+            'fk_app_concert_artist_id'
         );
-    }
-
-    public function down(Schema $schema): void
-    {
-        $schema->dropTable(Album::TABLE_NAME);
     }
 }

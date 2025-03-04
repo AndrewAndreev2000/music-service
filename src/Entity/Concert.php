@@ -2,15 +2,14 @@
 
 namespace App\Entity;
 
-use App\Bundle\HelpDeskBundle\Entity\Ticket;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: self::TABLE_NAME)]
-class Album
+class Concert
 {
-    public const TABLE_NAME = 'app_album';
+    public const TABLE_NAME = 'app_concert';
 
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\Id]
@@ -23,7 +22,7 @@ class Album
     #[ORM\Column(name: 'description', type: 'string', nullable: false)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'albums', targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'concerts')]
     #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?User $artist = null;
 
