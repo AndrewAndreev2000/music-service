@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use App\Entity\Genre;
 use App\Entity\User;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
@@ -14,7 +15,26 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20250302035127 extends AbstractMigration
 {
+    public const USER_GENRE_TABLE_NAME = 'app_user_genre';
+    public const USER_FAVORITE_GENRE_TABLE_NAME = 'app_user_favorite_genre';
+
     public function up(Schema $schema): void
+    {
+        /* Tables generation * */
+        $this->createUserTable($schema);
+        $this->createUserGenreTable($schema);
+
+        /* Foreign keys generation * */
+        $this->createUserGenreForeignKeys($schema);
+        $this->createUserFavoriteGenreForeignKeys($schema);
+    }
+
+    public function down(Schema $schema): void
+    {
+        $schema->dropTable(User::TABLE_NAME);
+    }
+
+    private function createUserTable(Schema $schema): void
     {
         $table = $schema->createTable(User::TABLE_NAME);
         $table->addColumn('id', Types::INTEGER, ['autoincrement' => true]);
@@ -27,8 +47,57 @@ final class Version20250302035127 extends AbstractMigration
         $table->addUniqueIndex(['name'], 'UNIQ_USER_NAME');
     }
 
-    public function down(Schema $schema): void
+    private function createUserGenreTable(Schema $schema): void
     {
-        $schema->dropTable(User::TABLE_NAME);
+        $table = $schema->createTable(self::USER_GENRE_TABLE_NAME);
+        $table->addColumn('user_id', Types::INTEGER, ['notnull' => true]);
+        $table->addColumn('genre_id', Types::INTEGER, ['notnull' => true]);
+        $table->setPrimaryKey(['user_id', 'genre_id']);
+    }
+
+    private function createUserFavoriteGenreTable(Schema $schema): void
+    {
+        $table = $schema->createTable(self::USER_FAVORITE_GENRE_TABLE_NAME);
+        $table->addColumn('user_id', Types::INTEGER, ['notnull' => true]);
+        $table->addColumn('favorite_genre_id', Types::INTEGER, ['notnull' => true]);
+        $table->setPrimaryKey(['user_id', 'favorite_genre_id']);
+    }
+
+    private function createUserGenreForeignKeys(Schema $schema): void
+    {
+        $table = $schema->getTable(self::USER_GENRE_TABLE_NAME);
+        $table->addForeignKeyConstraint(
+            $schema->getTable(User::TABLE_NAME),
+            ['user_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE'],
+            'fk_app_user_genre_user_id'
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable(Genre::TABLE_NAME),
+            ['genre_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE'],
+            'fk_app_user_genre_genre_id'
+        );
+    }
+
+    private function createUserFavoriteGenreForeignKeys(Schema $schema): void
+    {
+        $table = $schema->getTable(self::USER_FAVORITE_GENRE_TABLE_NAME);
+        $table->addForeignKeyConstraint(
+            $schema->getTable(User::TABLE_NAME),
+            ['user_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE'],
+            'fk_app_user_favorite_genre_user_id'
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable(Genre::TABLE_NAME),
+            ['genre_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE'],
+            'fk_app_user_favorite_genre_favorite_genre_id'
+        );
     }
 }
