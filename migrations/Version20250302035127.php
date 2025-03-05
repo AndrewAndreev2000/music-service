@@ -16,7 +16,6 @@ use Doctrine\Migrations\AbstractMigration;
 final class Version20250302035127 extends AbstractMigration
 {
     public const USER_GENRE_TABLE_NAME = 'app_user_genre';
-    public const USER_FAVORITE_GENRE_TABLE_NAME = 'app_user_favorite_genre';
 
     public function up(Schema $schema): void
     {
@@ -26,7 +25,6 @@ final class Version20250302035127 extends AbstractMigration
 
         /* Foreign keys generation * */
         $this->createUserGenreForeignKeys($schema);
-        $this->createUserFavoriteGenreForeignKeys($schema);
     }
 
     public function down(Schema $schema): void
@@ -55,14 +53,6 @@ final class Version20250302035127 extends AbstractMigration
         $table->setPrimaryKey(['user_id', 'genre_id']);
     }
 
-    private function createUserFavoriteGenreTable(Schema $schema): void
-    {
-        $table = $schema->createTable(self::USER_FAVORITE_GENRE_TABLE_NAME);
-        $table->addColumn('user_id', Types::INTEGER, ['notnull' => true]);
-        $table->addColumn('favorite_genre_id', Types::INTEGER, ['notnull' => true]);
-        $table->setPrimaryKey(['user_id', 'favorite_genre_id']);
-    }
-
     private function createUserGenreForeignKeys(Schema $schema): void
     {
         $table = $schema->getTable(self::USER_GENRE_TABLE_NAME);
@@ -79,25 +69,6 @@ final class Version20250302035127 extends AbstractMigration
             ['id'],
             ['onDelete' => 'CASCADE'],
             'fk_app_user_genre_genre_id'
-        );
-    }
-
-    private function createUserFavoriteGenreForeignKeys(Schema $schema): void
-    {
-        $table = $schema->getTable(self::USER_FAVORITE_GENRE_TABLE_NAME);
-        $table->addForeignKeyConstraint(
-            $schema->getTable(User::TABLE_NAME),
-            ['user_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE'],
-            'fk_app_user_favorite_genre_user_id'
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable(Genre::TABLE_NAME),
-            ['genre_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE'],
-            'fk_app_user_favorite_genre_favorite_genre_id'
         );
     }
 }
