@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\Concert\CreateConcertDTO;
+use App\Entity\Concert\Manager\ConcertManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -13,14 +14,17 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 class ConcertCrudController extends AbstractController
 {
     public function __construct(
-        private readonly TokenStorageInterface $token
+        private readonly TokenStorageInterface $token,
+        private readonly ConcertManager $manager,
     ) {
     }
 
     #[Route('/', name: 'app_concert_index')]
     public function indexAction(): JsonResponse
     {
-        return new JsonResponse(['test' => '12121212']);
+        $user = $this->getUser();
+
+        return new JsonResponse(['concerts' => $this->manager->getConcerts($user)]);
     }
 
     #[Route('/create', name: 'app_concert_create', methods: ['POST'])]

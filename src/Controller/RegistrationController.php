@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\User\CreateUserDTO;
-use App\Entity\Manager\UserManager;
+use App\Entity\User\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

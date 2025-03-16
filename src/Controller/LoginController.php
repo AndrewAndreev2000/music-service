@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\User\LoginUserDTO;
-use App\Entity\User;
+use App\Entity\User\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
