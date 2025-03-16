@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Concert;
 
+use App\Entity\Concert\Repository\ConcertRepository;
+use App\Entity\User\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ConcertRepository::class)]
 #[ORM\Table(name: self::TABLE_NAME)]
 class Concert
 {
@@ -19,12 +21,12 @@ class Concert
     #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     private ?string $name = null;
 
-    #[ORM\Column(name: 'description', type: 'string', nullable: false)]
-    private ?string $description = null;
-
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'concerts')]
     #[ORM\JoinColumn(name: 'artist_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?User $artist = null;
+
+    #[ORM\Column(name: 'date', type: Types::DATETIME_MUTABLE, nullable: false)]
+    protected ?\DateTimeInterface $date = null;
 
     public function getId(): ?int
     {
@@ -51,6 +53,18 @@ class Concert
     public function setArtist(?User $artist): self
     {
         $this->artist = $artist;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

@@ -19,5 +19,31 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Kernel.php'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    app.entity.concert.manager.concert_manager:
+        class: App\Entity\Concert\Manager\ConcertManager
+        public: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@app.provider.user_state_provider.chain'
+
+    app.provider.user_state_provider.chain:
+        class: App\Provider\UserStateChainProvider
+        arguments:
+            - !tagged_iterator app.provider.user_chain_state
+
+    app.provider.unregistered_user_state_provider:
+        class: App\Provider\UnregisteredUserStateProvider
+        tags:
+            - { name: app.provider.user_chain_state, priority: 1 }
+
+    app.provider.user_has_favorite_genres_state_provider:
+        class: App\Provider\UserHasFavoriteGenresStateProvider
+        tags:
+            - { name: app.provider.user_chain_state, priority: 2 }
+
+#    app.help_desk.provider.in_progress_with_task_ticket_sign_state_provider:
+#        class: App\Bundle\HelpDeskBundle\Provider\TicketSign\InProgressWithTaskTicketSignStateProvider
+#        arguments:
+#            - '@doctrine'
+#        tags:
+#            - { name: app.help_desk.provider.ticket_sign_chain_state, priority: 2 }

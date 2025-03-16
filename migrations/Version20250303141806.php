@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
-use App\Entity\Concert;
-use App\Entity\User;
+use App\Entity\Concert\Concert;
+use App\Entity\User\User;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Migrations\AbstractMigration;
@@ -31,8 +31,8 @@ final class Version20250303141806 extends AbstractMigration
         $table = $schema->createTable(Concert::TABLE_NAME);
         $table->addColumn('id', Types::INTEGER, ['autoincrement' => true]);
         $table->addColumn('name', Types::STRING, ['notnull' => true, 'length' => 255]);
-        $table->addColumn('description', Types::TEXT, ['notnull' => true]);
-        $table->addColumn('artist_id', Types::INTEGER, ['notnull' => false]);
+        $table->addColumn('artist_id', Types::INTEGER, ['notnull' => true]);
+        $table->addColumn('date', Types::DATETIME_MUTABLE, ['comment' => '(DC2Type:datetime)', 'notnull' => true]);
         $table->setPrimaryKey(['id']);
     }
 
